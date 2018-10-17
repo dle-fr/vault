@@ -4,9 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/vault/helper/consts"
-
 	"github.com/hashicorp/vault/api"
+	"github.com/hashicorp/vault/helper/consts"
 	"github.com/mitchellh/cli"
 )
 

@@ -136,6 +136,8 @@ type unlockInformation struct {
 type Core struct {
 	entCore
 
+	// The registry of builtin plugins is passed in here as an interface because
+	// if it's used directly, it results in import cycles.
 	builtinRegistry BuiltinRegistry
 
 	// N.B.: This is used to populate a dev token down replication, as
@@ -394,12 +396,6 @@ type Core struct {
 	// Stores loggers so we can reset the level
 	allLoggers     []log.Logger
 	allLoggersLock sync.RWMutex
-}
-
-type BuiltinRegistry interface {
-	Contains(name string, pluginType consts.PluginType) bool
-	Get(name string, pluginType consts.PluginType) (func() (interface{}, error), bool)
-	Keys(pluginType consts.PluginType) []string
 }
 
 // CoreConfig is used to parameterize a core
@@ -1563,4 +1559,13 @@ func (c *Core) SetLogLevel(level log.Level) {
 	for _, logger := range c.allLoggers {
 		logger.SetLevel(level)
 	}
+}
+
+// BuiltinRegistry is an interface that allows the "vault" package to use
+// the registry of builtin plugins without getting an import cycle. It
+// also allows for mocking the registry easily.
+type BuiltinRegistry interface {
+	Contains(name string, pluginType consts.PluginType) bool
+	Get(name string, pluginType consts.PluginType) (func() (interface{}, error), bool)
+	Keys(pluginType consts.PluginType) []string
 }

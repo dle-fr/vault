@@ -7,7 +7,6 @@ import (
 
 	"github.com/hashicorp/vault/helper/builtinplugins"
 	"github.com/hashicorp/vault/helper/consts"
-
 	"github.com/mitchellh/cli"
 )
 
